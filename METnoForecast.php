@@ -182,15 +182,117 @@ class METnoForecast {
     public function getTemperature() {
         return $this->temperature;
     }
-    
+
     /**
      * Returns the symbol for the weather
      * @return METnoSymbol
      */
-    public function getSymbol() {
+    public function getSymbol()
+    {
         return $this->symbol;
     }
-    
-    
+
+    /**
+     * @return decimal
+     */
+    public function getWindSpeed()
+    {
+        return $this->windSpeed;
+    }
+
+    /**
+     * @return bool|int|string
+     */
+    public function getWindDegrees()
+    {
+        return $this->windDegrees;
+    }
+
+    /**
+     * @return bool|int|string
+     */
+    public function getWindOrientation()
+    {
+        return $this->windOrientation;
+    }
+
+    /**
+     * @return type
+     */
+    public function getPrecipitation()
+    {
+        return $this->precipitation;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPrecipitationInHours()
+    {
+        return $this->precipitationInHours;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHumidity()
+    {
+        return $this->humidity;
+    }
+
+    /**
+     * @return type
+     */
+    public function getPressure()
+    {
+        return $this->pressure;
+    }
+
+    /**
+     * @return bool|int|string
+     */
+    public function getPressureUnit()
+    {
+        return $this->pressureUnit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFog()
+    {
+        return $this->fog;
+    }
+
+    /**
+     * @return bool|int|string
+     */
+    public function getCloudiness()
+    {
+        return $this->cloudiness;
+    }
+
+    /**
+     * @return bool|int|string
+     */
+    public function getLowClouds()
+    {
+        return $this->lowClouds;
+    }
+
+    /**
+     * @return bool|int|string
+     */
+    public function getMediumClouds()
+    {
+        return $this->mediumClouds;
+    }
+
+    /**
+     * @return bool|int|string
+     */
+    public function getHighClouds()
+    {
+        return $this->highClouds;
+    }
 }
-?>

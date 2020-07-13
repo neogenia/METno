@@ -16,7 +16,8 @@
     "require": {
         "php" : ">=5.3.0",
         "ext-curl" : "*",
-        "ext-dom" : "*"
+        "ext-dom" : "*",
+        "ext-simplexml" : "*"
     },
     "autoload" : {
         "classmap": [
