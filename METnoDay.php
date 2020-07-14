@@ -207,21 +207,28 @@ class METnoDay extends METnoForecast {
     public function isToday() {
         return $this->today;
     }
-    
+
     /**
      * Returns self becouse of overiding the hour forecast
      * @return \METnoDay
      */
-    public function getMETDay() {
+    public function getMETDay()
+    {
         return $this;
     }
-    
+
+    public function getHourWeather()
+    {
+        return $this->hourWeather;
+    }
+
     /**
      * Return the hour forecast if exist, if not, return self
      * @param int $hour
      * @return METnoForecast
      */
-    public function getForecastForHour($hour) {
+    public function getForecastForHour($hour)
+    {
         if (isset($this->hourWeather[$hour])) {
             return $this->hourWeather[$hour];
         } else {
@@ -294,4 +301,3 @@ class METnoDay extends METnoForecast {
     }
     
 }
-?>

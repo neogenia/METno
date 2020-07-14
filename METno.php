@@ -373,9 +373,11 @@ class METno extends METnoFactory {
                                             "difference"    => $difference,     // difference in hours betwen from to to
                                             "symbol"        => new self::$classSymbol(self::getAttributeValue($symbolAttributes, "number",0),
                                                                                      self::getAttributeValue($symbolAttributes, "id")),
-                                            "precipitation" => new self::$classPrecipitation(self::getAttributeValue($precipitationAttributes, "value",1),
-                                                                                     self::getAttributeValue($precipitationAttributes, "minvalue",1),
-                                                                                     self::getAttributeValue($precipitationAttributes, "maxvalue",1))
+                                            "precipitation" => new self::$classPrecipitation(
+                                                self::getAttributeValue($precipitationAttributes, "value", 1),
+                                                self::getAttributeValue($precipitationAttributes, "minvalue", 1),
+                                                self::getAttributeValue($precipitationAttributes, "maxvalue", 1)
+                                            )
                                         );
 
                                     }
@@ -509,5 +511,3 @@ class METno extends METnoFactory {
         return $this->error(new Exception("Forecast for date $date doesn't exist", METno::DATA_EMPTY));
     }
 }
-
-?>

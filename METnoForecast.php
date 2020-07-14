@@ -11,107 +11,109 @@
 class METnoForecast {
     private $parent                     = false;
     
-    /**
-     *
-     * @var METnoSymbol 
-     */
+    /** @var METnoSymbol */
     protected $symbol                   = 0;
-   
-    
+
     protected $date                     = "";
     protected $hour                     = "";
-            
+
     /**
-     * Temperature in celcius
-     * @var type 
-     */
-    protected $temperature              = 0;
-    
+	 * Temperature in celcius
+	 * @var float
+	 */
+	protected $temperature 				= 0.0;
+
     /**
      * Wind speed in m/s
-     * @var decimal 
+     * @var float
      */
-    protected $windSpeed                = 0;
-    
-    protected $windDegrees              = 0;
-    
+    protected $windSpeed                = 0.0;
+
+    /** @var int */
+    protected $windSpeedBeufort         = 0;
+
+	/** @var float */
+    protected $windDegrees              = 0.0;
+
     protected $windOrientation          = "NONE";
-    
+
     /**
      * Precipitation (srážky) in mm
-     * @var type 
+     * @var null|METnoPrecipitation
      */
-    protected $precipitation            = 0;
-    
+    protected $precipitation;
+
     protected $precipitationInHours     = array();
 
 
     /**
      * Humidity (vlhkost) in percente
-     * @var int 
+     * @var float
      */
-    protected $humidity                 = 0;
-           
+    protected $humidity                 = 0.0;
+
     /**
      * Pressure in hPa (default)
-     * 
-     * @var type 
+     *
+     * @var float
      */
-    protected $pressure                 = 0;
+    protected $pressure                 = 0.0;
     protected $pressureUnit             = "hPa";
 
 
     /**
      * Fog in percente
-     * @var int 
+     * @var int
      */
     protected $fog                      = 0;
-    
-    protected $cloudiness               = 0;
-    
+
+    /** @var float */
+    protected $cloudiness               = 0.0;
+
     protected $lowClouds                = 0;
-    
+
     protected $mediumClouds             = 0;
-    
-    protected $highClouds               = 0;    
-    
-    
+
+    protected $highClouds               = 0;
+
+
     public function __construct(METnoDay $parent,$date,$hour,SimpleXMLElement $mainXMLElement,$symbolsArray) {
         $this->parent   = $parent;
-        
+
         $this->date     = $date;
-        $this->hour     = $hour;        
-        
+        $this->hour     = $hour;
+
         /**
          * Get all the datas from main XML element - weather info (detail)
          */
         
         if (isset($mainXMLElement->temperature)) {
-            $this->temperature      = METnoFactory::getAttributeValue($mainXMLElement->temperature->attributes(), "value",  METnoFactory::getTemperatureDecimals());
+			$this->temperature = (float) METnoFactory::getAttributeValue($mainXMLElement->temperature->attributes(), "value", METnoFactory::getTemperatureDecimals());
         }
         
         if (isset($mainXMLElement->windSpeed)) {
-            $this->windSpeed        = METnoFactory::getAttributeValue($mainXMLElement->windSpeed->attributes(), "value",  METnoFactory::getWindSpeedDecimals());
+            $this->windSpeed        = (float) METnoFactory::getAttributeValue($mainXMLElement->windSpeed->attributes(), "mps",  METnoFactory::getWindSpeedDecimals());
+            $this->windSpeedBeufort = (int) METnoFactory::getAttributeValue($mainXMLElement->windSpeed->attributes(), "beaufort");
         }
         
         if (isset($mainXMLElement->windDirection)) {
             $attribtues             = $mainXMLElement->windDirection->attributes();
-            $this->windDegrees      = METnoFactory::getAttributeValue($attribtues, "deg",0);
+            $this->windDegrees      = (float) METnoFactory::getAttributeValue($attribtues, "deg",0);
             $this->windOrientation  = METnoFactory::getAttributeValue($attribtues, "name");
         }
         
         if (isset($mainXMLElement->humidity)) {
-            $this->humidity         = METnoFactory::getAttributeValue($mainXMLElement->humidity->attributes(), "value",  METnoFactory::getPercenteDecimals());
+            $this->humidity         = (float) METnoFactory::getAttributeValue($mainXMLElement->humidity->attributes(), "value",  METnoFactory::getPercenteDecimals());
         }
         
         if (isset($mainXMLElement->pressure)) {
             $attribtues             = $mainXMLElement->pressure->attributes();
-            $this->pressure         = METnoFactory::getAttributeValue($attribtues, "value",1);
+            $this->pressure         = (float) METnoFactory::getAttributeValue($attribtues, "value",1);
             $this->pressureUnit     = METnoFactory::getAttributeValue($attribtues, "unit");
         }
         
         if (isset($mainXMLElement->cloudiness)) {
-            $this->cloudiness       = METnoFactory::getAttributeValue($mainXMLElement->cloudiness->attributes(), "percent",  METnoFactory::getPercenteDecimals());
+            $this->cloudiness       = (float) METnoFactory::getAttributeValue($mainXMLElement->cloudiness->attributes(), "percent",  METnoFactory::getPercenteDecimals());
         }
         
         if (isset($mainXMLElement->fog)) {
@@ -193,15 +195,23 @@ class METnoForecast {
     }
 
     /**
-     * @return decimal
+     * @return float
      */
     public function getWindSpeed()
     {
         return $this->windSpeed;
     }
 
+	/**
+	 * @return int
+	 */
+	public function getWindSpeedBeufort()
+	{
+		return $this->windSpeedBeufort;
+	}
+
     /**
-     * @return bool|int|string
+     * @return float
      */
     public function getWindDegrees()
     {
@@ -216,9 +226,9 @@ class METnoForecast {
         return $this->windOrientation;
     }
 
-    /**
-     * @return type
-     */
+	/**
+	 * @return METnoPrecipitation|null
+	 */
     public function getPrecipitation()
     {
         return $this->precipitation;
@@ -233,7 +243,7 @@ class METnoForecast {
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getHumidity()
     {
@@ -241,7 +251,7 @@ class METnoForecast {
     }
 
     /**
-     * @return type
+     * @return float
      */
     public function getPressure()
     {
@@ -265,7 +275,7 @@ class METnoForecast {
     }
 
     /**
-     * @return bool|int|string
+     * @return float
      */
     public function getCloudiness()
     {

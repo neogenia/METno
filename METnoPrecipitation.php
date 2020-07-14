@@ -8,31 +8,41 @@
  * 
  */
 
-class METnoPrecipitation {
-    protected $value    = 0;
-    protected $min      = 0;
-    protected $max      = 0;
-    
-    public function __construct($value,$min,$max) {
-        $this->value    = $value;
-        $this->min      = $min;
-        $this->max      = $max;
+class METnoPrecipitation
+{
+    /** @var float */
+    protected $value = 0.0;
+
+    /** @var float */
+    protected $min = 0.0;
+
+    /** @var float */
+    protected $max = 0.0;
+
+    public function __construct($value, $min, $max)
+    {
+        $this->value = $value;
+        $this->min = $min;
+        $this->max = $max;
     }
-    
-    public function __toString() {
+
+    public function __toString()
+    {
         return "$this->value";
     }
-    
-    public function getValue() {
+
+    public function getValue()
+    {
         return $this->value;
     }
-    
-    public function getMIN() {
+
+    public function getMIN()
+    {
         return $this->min;
     }
-    
-    public function getMAX() {
+
+    public function getMAX()
+    {
         return $this->max;
     }
 }
-?>
