@@ -19,7 +19,7 @@
  */
 class METno extends METnoFactory {
 
-    protected $apiRequest       = "https://api.met.no/weatherapi/locationforecast/1.9/?";
+    protected $apiRequest       = "https://api.met.no/weatherapi/locationforecast/2.0/classic?";
     protected $apiParameters    = "";
 
     /**
@@ -39,7 +39,7 @@ class METno extends METnoFactory {
      * @param <int|boolean>     $seeLevel - meters
      */
     public function __construct($lat, $lon, $seeLevel = false) {
-        $this->apiParameters       .= "lat=$lat;lon=$lon";
+        $this->apiParameters       .= "lat=".$lat."&lon=".$lon;
         if (!is_bool($seeLevel)) {
             $this->apiParameters   .= "&mls=$seeLevel";
         }
@@ -67,18 +67,39 @@ class METno extends METnoFactory {
             $content = curl_exec($curl);
 
             $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            curl_close($curl);
 
-            if (curl_getinfo($curl, CURLINFO_HTTP_CODE) == 200) {
-                curl_close($curl);
+            if($this->isValidXml($content)) {
                 return $content;
             } else {
-                curl_close($curl);
                 throw new Exception("Error with downloading file from $url with HTTP Code: $httpCode", METno::DOWNLOAD_FAILED);
             }
         } catch (Exception $e) {
             return $this->error($e);
         }
         return false;
+    }
+
+    /**
+     * @param string $xmlContent
+     * @return bool
+     */
+    private function isValidXml($xmlContent)
+    {
+        if (trim($xmlContent) === '') {
+            return false;
+        }
+
+        libxml_use_internal_errors(true);
+
+        $doc = new DOMDocument();
+        $doc->loadXML($xmlContent);
+
+        $errors = libxml_get_errors();
+        libxml_clear_errors();
+
+        return empty($errors);
+
     }
 
     /**
@@ -352,9 +373,11 @@ class METno extends METnoFactory {
                                             "difference"    => $difference,     // difference in hours betwen from to to
                                             "symbol"        => new self::$classSymbol(self::getAttributeValue($symbolAttributes, "number",0),
                                                                                      self::getAttributeValue($symbolAttributes, "id")),
-                                            "precipitation" => new self::$classPrecipitation(self::getAttributeValue($precipitationAttributes, "value",1),
-                                                                                     self::getAttributeValue($precipitationAttributes, "minvalue",1),
-                                                                                     self::getAttributeValue($precipitationAttributes, "maxvalue",1))
+                                            "precipitation" => new self::$classPrecipitation(
+                                                self::getAttributeValue($precipitationAttributes, "value", 1),
+                                                self::getAttributeValue($precipitationAttributes, "minvalue", 1),
+                                                self::getAttributeValue($precipitationAttributes, "maxvalue", 1)
+                                            )
                                         );
 
                                     }
@@ -488,5 +511,3 @@ class METno extends METnoFactory {
         return $this->error(new Exception("Forecast for date $date doesn't exist", METno::DATA_EMPTY));
     }
 }
-
-?>
