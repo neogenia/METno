@@ -11,8 +11,8 @@
 class METnoForecast {
     private $parent                     = false;
     
-    /** @var METnoSymbol */
-    protected $symbol                   = 0;
+    /** @var METnoSymbol|null */
+    protected $symbol;
 
     protected $date                     = "";
     protected $hour                     = "";
@@ -187,7 +187,7 @@ class METnoForecast {
 
     /**
      * Returns the symbol for the weather
-     * @return METnoSymbol
+     * @return METnoSymbol|null
      */
     public function getSymbol()
     {

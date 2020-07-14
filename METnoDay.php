@@ -18,9 +18,11 @@ class METnoDay extends METnoForecast {
      * @var METno 
      */
     protected $metNo                    = false;     
-    
+
+	/** @var bool  */
     protected $today                    = false;
-    
+
+    /** @var METnoDay[] */
     protected $hourWeather              = array();    
     
     /**
@@ -217,6 +219,9 @@ class METnoDay extends METnoForecast {
         return $this;
     }
 
+	/**
+	 * @return METnoDay[]
+	 */
     public function getHourWeather()
     {
         return $this->hourWeather;
